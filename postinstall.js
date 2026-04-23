@@ -3,7 +3,18 @@
 const fs = require('fs');
 const path = require('path');
 
-const projectRoot = process.env.INIT_CWD || process.cwd();
+// Walk up from node_modules/grammar-checker-cli to the actual project root
+function findProjectRoot() {
+  let dir = __dirname;
+  while (dir !== path.dirname(dir)) {
+    if (path.basename(dir) !== 'grammar-checker-cli' && fs.existsSync(path.join(dir, 'package.json'))) {
+      return dir;
+    }
+    dir = path.dirname(dir);
+  }
+  return process.cwd();
+}
+const projectRoot = findProjectRoot();
 
 // 1. Auto-create grammar.config.json
 const configPath = path.resolve(projectRoot, 'grammar.config.json');

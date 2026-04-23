@@ -15,7 +15,7 @@ grammar.config.json auto-created in your project root
       ↓
 Update baseUrl and routes
       ↓
-npm run grammar-check
+npx run grammar-check
       ↓
 grammar-report.csv ✅
 ```
