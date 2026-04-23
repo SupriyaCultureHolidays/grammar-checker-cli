@@ -20,8 +20,7 @@ const projectRoot = findProjectRoot();
 const configPath = path.resolve(projectRoot, 'grammar.config.json');
 if (!fs.existsSync(configPath)) {
   const DEFAULT_CONFIG = {
-    baseUrl: 'https://your-live-site.com',
-    routes: ['/', '/about', '/contact'],
+    htmlDir: './frontend',
     output: './grammar-report.csv',
     chunkSize: 4000,
     delayMs: 500,

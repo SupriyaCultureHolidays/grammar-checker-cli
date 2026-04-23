@@ -1,10 +1,5 @@
 {
-  "baseUrl": "https://example.com",
-  "routes": [
-    "/",
-    "/about",
-    "/contact"
-  ],
+  "htmlDir": "./frontend",
   "output": "./grammar-report.csv",
   "chunkSize": 4000,
   "delayMs": 500

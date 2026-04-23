@@ -3,7 +3,7 @@
 const path = require('path');
 const fs = require('fs');
 const { loadConfig } = require('./lib/utils');
-const { scrapeText } = require('./lib/scraper');
+const { findFiles, extractText } = require('./lib/scraper');
 const { checkGrammar } = require('./lib/checker');
 const { writeReport } = require('./lib/csv');
 
@@ -16,27 +16,40 @@ async function run() {
   }
   const config = loadConfig(configPath);
 
-  const { baseUrl, routes, output, chunkSize = 4000, delayMs = 500 } = config;
+  const { htmlDir, output, chunkSize = 4000, delayMs = 500 } = config;
+  const resolvedDir = path.resolve(process.cwd(), htmlDir);
+
+  if (!fs.existsSync(resolvedDir)) {
+    console.error(`❌ htmlDir not found: ${resolvedDir}`);
+    process.exit(1);
+  }
+
+  const htmlFiles = findFiles(resolvedDir);
+  if (!htmlFiles.length) {
+    console.log('No HTML/JSX/JS files found.');
+    process.exit(0);
+  }
+
   const allIssues = [];
 
-  for (const route of routes) {
-    const url = `${baseUrl}${route}`;
-    console.log(`Checking: ${route}`);
+  for (const filePath of htmlFiles) {
+    const label = path.relative(process.cwd(), filePath);
+    console.log(`Checking: ${label}`);
 
     let text;
     try {
-      text = await scrapeText(url);
+      text = extractText(filePath);
     } catch (err) {
-      console.error(`  Skipping ${route}: ${err.message}`);
+      console.error(`  Skipping: ${err.message}`);
       continue;
     }
 
-    if (!text || !text.trim()) {
-      console.log(`  Empty content, skipping.`);
+    if (!text.trim()) {
+      console.log('  Empty content, skipping.');
       continue;
     }
 
-    const issues = await checkGrammar(text, url, chunkSize, delayMs);
+    const issues = await checkGrammar(text, label, chunkSize, delayMs);
     console.log(`  Found ${issues.length} issues`);
     allIssues.push(...issues);
   }
