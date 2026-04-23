@@ -7,27 +7,13 @@ const { scrapeText } = require('./lib/scraper');
 const { checkGrammar } = require('./lib/checker');
 const { writeReport } = require('./lib/csv');
 
-const DEFAULT_CONFIG = {
-  baseUrl: 'https://your-live-site.com',
-  routes: ['/', '/about', '/contact'],
-  output: './grammar-report.csv',
-  chunkSize: 4000,
-  delayMs: 500,
-};
-
-function initConfig() {
-  const configPath = path.resolve(process.cwd(), 'grammar.config.json');
-  if (!fs.existsSync(configPath)) {
-    fs.writeFileSync(configPath, JSON.stringify(DEFAULT_CONFIG, null, 2));
-    console.log('✅ grammar.config.json created in your project root.');
-    console.log('👉 Please update baseUrl and routes, then run again.\n');
-    process.exit(0);
-  }
-}
-
 async function run() {
-  initConfig();
   const configPath = path.resolve(process.cwd(), 'grammar.config.json');
+
+  if (!fs.existsSync(configPath)) {
+    console.error('❌ grammar.config.json not found. Please create it first.');
+    process.exit(1);
+  }
   const config = loadConfig(configPath);
 
   const { baseUrl, routes, output, chunkSize = 4000, delayMs = 500 } = config;
