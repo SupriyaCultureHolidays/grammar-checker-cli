@@ -11,7 +11,8 @@ const DEFAULT_CONFIG = {
   delayMs: 500,
 };
 
-const configPath = path.resolve(process.cwd(), 'grammar.config.json');
+const projectRoot = process.env.INIT_CWD || process.cwd();
+const configPath = path.resolve(projectRoot, 'grammar.config.json');
 
 if (!fs.existsSync(configPath)) {
   fs.writeFileSync(configPath, JSON.stringify(DEFAULT_CONFIG, null, 2));
