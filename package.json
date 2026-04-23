@@ -1,0 +1,17 @@
+{
+  "name": "grammar-checker-cli",
+  "version": "1.0.0",
+  "description": "CLI tool to scan web pages for grammar/spelling issues and generate CSV reports",
+  "main": "index.js",
+  "bin": {
+    "grammar-check": "./index.js"
+  },
+  "scripts": {
+    "grammar-check": "node index.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "csv-writer": "^1.6.0",
+    "puppeteer": "^24.42.0"
+  }
+}
