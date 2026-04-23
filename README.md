@@ -211,6 +211,7 @@ node index.js
 ## Requirements
 
 - Node.js v16 or higher
+- **Google Chrome** installed on your machine
 - Your website must be **live and publicly accessible**
 - No authentication supported — only public pages can be scanned
 
